@@ -25,7 +25,11 @@ namespace WebCrawlerProxyList
 
             if (string.IsNullOrEmpty(outputDirectory))
             {
-                MessageBox.Show("Seleção de pasta cancelada. O processo não será iniciado.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Seleção de pasta cancelada. O processo não será iniciado.",
+                    "Aviso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
                 return;
             }
 
@@ -34,14 +38,20 @@ namespace WebCrawlerProxyList
                 UseWaitCursor = true;
                 Enabled = false;
 
-                // Chama o serviço
+                // Chama o serviço.
                 await _webCrawlerService.StartCrawlWithConcurrency(outputDirectory);
 
-                MessageBox.Show("Processo concluído com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Processo concluído com sucesso!", "Sucesso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao executar o processo: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Erro ao executar o processo: {ex.Message}",
+                    "Erro",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                throw;
             }
             finally
             {

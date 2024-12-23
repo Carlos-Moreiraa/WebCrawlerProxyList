@@ -24,7 +24,7 @@ namespace WebCrawlerProxyList.Repositories
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erro ao salvar a execução: {ex.Message}");
+                MessageBox.Show($"Erro ao salvar a execução: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

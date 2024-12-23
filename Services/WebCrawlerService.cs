@@ -24,9 +24,9 @@ namespace WebCrawlerProxyList.Services
             _crawlerRepository = crawlerRepository;
         }
 
+        //Método para iniciar as tarefas.
         public async Task StartCrawlWithConcurrency(string outputDirectory)
         {
-            //Método para iniciar as tarefas
 
             var startDate = DateTime.Now;
             var semaphore = new SemaphoreSlim(3);
@@ -38,7 +38,7 @@ namespace WebCrawlerProxyList.Services
 
 
 
-            // Configuração do driver
+            // Configuração do driver.
             new DriverManager().SetUpDriver(new ChromeConfig());
             var path = AppDomain.CurrentDomain.BaseDirectory.ToString();
             ChromeOptions options = new ChromeOptions();
@@ -60,6 +60,14 @@ namespace WebCrawlerProxyList.Services
 
                         await ProcessPageAsync(pageUrl, semaphore, startDate, outputDirectory, _driver);
                     }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Erro ao processar a página {page}. Detalhes: {ex.Message}",
+                                        "Erro de Processamento",
+                                        MessageBoxButtons.OK,
+                                        MessageBoxIcon.Error);
+                        return;
+                    }
                     finally
                     {
                         semaphore.Release();
@@ -67,17 +75,17 @@ namespace WebCrawlerProxyList.Services
                 }));
             }
 
-            // Aguarda todas as tarefas terminarem
+            // Aguarda todas as tarefas terminarem.
             await Task.WhenAll(tasks);
 
-            // Fecha o driver após todas as tarefas terminarem
+            // Fecha o driver após todas as tarefas terminarem.
             _driver.Quit();
         }
 
-
+        //Método para salvar no banco, criar JSON e salvar o HTML.
         private async Task ProcessPageAsync(string url, SemaphoreSlim semaphore, DateTime startDate, string outputDirectory, ChromeDriver driver)
         {
-            //Método para salvar no banco, criar JSON e salvar o HTML.
+            
             await semaphore.WaitAsync();
 
             try
@@ -109,12 +117,16 @@ namespace WebCrawlerProxyList.Services
                     RowCount = proxyData.Count,
                     JsonData = jsonData
                 };
-
+                //Salva dados em banco.
                 await _crawlerRepository.SaveExecution(execution);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erro ao processar a página {url}: {ex.Message}");
+                MessageBox.Show($"Erro ao processar a página {url}: {ex.Message}",
+                    "Erro",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                throw;
             }
             finally
             {
@@ -122,9 +134,10 @@ namespace WebCrawlerProxyList.Services
             }
         }
 
+        //Método para recuperar dados das colunas e linhas do site.
         public async Task<List<Models.Proxy>> ExtractProxyData(string html)
         {
-            //Método para recuperar dados das colunas e linhas do site.
+           
 
             var proxyList = new List<Models.Proxy>();
 
@@ -158,15 +171,20 @@ namespace WebCrawlerProxyList.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erro ao extrair dados do HTML: {ex.Message}");
+               MessageBox.Show($"Erro ao extrair dados do HTML: {ex.Message}", 
+                   "Erro",
+                   MessageBoxButtons.OK,
+                   MessageBoxIcon.Error);
+                throw;
             }
 
             return proxyList;
         }
 
+        //Método para recuperar o total de páginas.
         private async Task<int> GetTotalPages(string baseUrl)
         {
-            //Método para recuperar o total de páginas.
+            
             try
             {
 
@@ -181,7 +199,7 @@ namespace WebCrawlerProxyList.Services
                 var paginationNode = doc.DocumentNode.SelectSingleNode("//ul[contains(@class, 'pagination')]");
                 if (paginationNode != null)
                 {
-                    // Identifica última página
+                    // Identifica última página.
                     var pageLinks = paginationNode.SelectNodes(".//a");
                     if (pageLinks != null && pageLinks.Count > 0)
                     {
@@ -193,18 +211,23 @@ namespace WebCrawlerProxyList.Services
                     }
                 }
 
-                // Se não encontrar a paginação, assume 1 página
+                // Se não encontrar a paginação, assume 1 página.
                 return 1;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erro ao determinar o número de páginas: {ex.Message}");
-                return 1; // Retorna 1 como padrão
+                MessageBox.Show($"Erro ao determinar o número de páginas: {ex.Message}",
+                    "Erro",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                
+            }
+            return 1; // Retorna 1 como padrão.
             }
         }
 
 
 
 
-    }
+    
 }

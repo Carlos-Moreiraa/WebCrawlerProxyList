@@ -11,11 +11,11 @@
 
                 if (folderDialog.ShowDialog() == DialogResult.OK)
                 {
-                    return folderDialog.SelectedPath; // Retorna a pasta selecionada pelo usuário
+                    return folderDialog.SelectedPath; // Retorna a pasta selecionada pelo usuário.
                 }
             }
 
-            // Retorna null se o usuário cancelar
+            // Retorna null se o usuário cancelar.
             return null;
         }
     }

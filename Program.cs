@@ -22,7 +22,7 @@ namespace WebCrawlerProxyList
 
             appSettingsPath = Path.GetFullPath(appSettingsPath);
 
-            // Verifica se o arquivo appsettings.json existe
+            // Verifica se o arquivo appsettings.json existe.
             if (!File.Exists(appSettingsPath))
             {
                 MessageBox.Show("Arquivo appsettings.json não encontrado!");

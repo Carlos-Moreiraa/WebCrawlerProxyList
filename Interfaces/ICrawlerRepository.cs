@@ -4,6 +4,6 @@ namespace WebCrawlerProxyList.Interfaces
 {
     public interface ICrawlerRepository
     {
-        Task SaveExecution(CrawlerExecution execution);  // Método para salvar execução
+        Task SaveExecution(CrawlerExecution execution);  // Chama método para salvar execução
     }
 }

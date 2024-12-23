@@ -97,7 +97,7 @@
             label2.Name = "label2";
             label2.Size = new Size(214, 45);
             label2.TabIndex = 4;
-            label2.Text = "Para executar o web Crawler, clique em\r\n iniciar para selecionar o diretorio onde\r\n será salvo os arquivos JSON e HTML.";
+            label2.Text = "Para executar o web Crawler, clique em\r\n iniciar, e selecione o diretorio onde\r\n será salvo os arquivos JSON e HTML.";
             // 
             // MainForm
             // 
